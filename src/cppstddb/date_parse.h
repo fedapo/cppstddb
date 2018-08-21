@@ -4,6 +4,7 @@
 // modified utility sqlite date parsing code
 
 #include <ctype.h>
+#include <cstdarg>
 #include <cassert>
 
 namespace cppstddb {

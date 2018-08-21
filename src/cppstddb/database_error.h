@@ -60,8 +60,7 @@ namespace cppstddb {
         build();
     }
 
-
-    void database_error::build() {
+    inline void database_error::build() {
         std::stringstream s;
         s << "message: " << message_;
         if (retcode_) s << ", retcode: " << retcode_;

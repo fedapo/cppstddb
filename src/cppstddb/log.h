@@ -28,21 +28,35 @@ namespace cppstddb {
     struct log_level_info {
         log_level level;
         const char *name;
-        static const log_level_info info[];
+        //static const log_level_info info[];
+
+        static const log_level_info* get_info()
+        {
+          static const log_level_info info[] = {
+            { log_level::none, "NONE" },
+            { log_level::error, "ERROR" },
+            { log_level::warn, "WARN" },
+            { log_level::info, "INFO" },
+            { log_level::debug, "DEBUG" },
+            { log_level::trace, "TRACE" },
+            {},
+          };
+          return info;
+        }
 
         static const log_level_info& get(log_level level) {
-            return info[static_cast<int>(level)];
+            return get_info()[static_cast<int>(level)];
         }
 
         static const log_level_info& get(const std::string& name) {
-            auto i = &info[0];
+            auto i = &get_info()[0];
             while ((i)->name && (i)->name != name) i++;
             if ((i)->name) return *i;
             throw std::runtime_error("log level name not found: " + name);
         }
     };
 
-    const log_level_info log_level_info::info[] = {
+    /*const log_level_info log_level_info::info[] = {
         {log_level::none,"NONE"},
         {log_level::error,"ERROR"},
         {log_level::warn,"WARN"},
@@ -50,7 +64,7 @@ namespace cppstddb {
         {log_level::debug,"DEBUG"},
         {log_level::trace,"TRACE"},
         {},
-    };
+    };*/
 
     inline std::ostream& operator<<(std::ostream &os, log_level level) {
         os << log_level_info::get(level).name;
@@ -71,14 +85,14 @@ namespace cppstddb {
             log_level level() const {return level_;}
             void level(const string& level);
 
-            void write(log_level level, const char *s, unsigned int n);
+            void write(log_level level, const char* s, size_t n);
             void write_table(ostream &os, string &key) const;
             void clear();
 
             struct log_msg {
                 log_level level;
                 const char *data;
-                unsigned int size;
+                size_t size;
             };
 
         private:
@@ -95,20 +109,11 @@ namespace cppstddb {
             void write_internal(const log_msg& msg);
     };
 
-
     inline std::string environment_variable(const std::string &name) {
         std::string result;
-#if defined(_WIN32) || defined(_WIN64)
-        char buf[MAX_PATH];
-        DWORD v = GetEnvironmentVariableA(name.c_str(), buf, sizeof(buf));
-        if (v != nullptr) result = buf;
+        auto v = std::getenv(name.c_str());
+        if(v) result = v;
         return result;
-
-#else
-        char *v = getenv(name.c_str());
-        if (v != nullptr) result = v;
-        return result;
-#endif
     }
 
     inline log_impl::log_impl():
@@ -132,7 +137,7 @@ namespace cppstddb {
         return log_;
     }
 
-    void log_impl::level(const string& level) {
+    inline void log_impl::level(const string& level) {
         auto l = log_level_info::get(level).level;
         sstream s;
         s << "setting log level from " << level_ << " to " << l;
@@ -141,7 +146,7 @@ namespace cppstddb {
         level_ = l;
     }
 
-    inline void log_impl::write(log_level level, const char *s, unsigned int n) {
+    inline void log_impl::write(log_level level, const char* s, size_t n) {
         log_msg msg;
         msg.level = level;
         msg.data = s;

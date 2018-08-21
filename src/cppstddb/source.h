@@ -15,7 +15,7 @@ namespace cppstddb {
         string password;
     };
 
-    std::ostream& operator<<(std::ostream& os, const source &s) {
+    inline std::ostream& operator<<(std::ostream& os, const source &s) {
         os << "(";
         os << "protocol: " << s.protocol;
         os << ", server: " << s.server;

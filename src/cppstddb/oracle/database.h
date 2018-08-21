@@ -15,8 +15,8 @@ namespace cppstddb { namespace oracle {
         template<class P> class connection;
         template<class P> class statement;
         template<class P> class rowset;
-        template<class P> class bind_type;
-        template<class P,class T> class field;
+        template<class P> struct bind_type;
+        template<class P,class T> struct field;
 
         template<class P> using cell_t = cppstddb::front::cell<database<P>>;
 

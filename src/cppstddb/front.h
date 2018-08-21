@@ -1,7 +1,13 @@
 #ifndef CPPSTDDB_FRONT_H
 #define CPPSTDDB_FRONT_H
 #include <string>
-#include <experimental/string_view>
+
+#ifdef _MSC_VER
+  #include <string_view>
+#else
+  #include <experimental/string_view>
+#endif
+
 #include <memory>
 #include <exception>
 #include <cppstddb/log.h>
@@ -48,7 +54,11 @@ namespace cppstddb { namespace front {
             using database_type = D;
             using policy_type = typename database_type::policy_type;
             using string = std::string;
+#ifdef _MSC_VER
+            using string_view = std::string_view;
+#else
             using string_view = std::experimental::string_view;
+#endif
             using connection_t = connection<database_type>;
             using rowset_t = rowset<database_type>;
 

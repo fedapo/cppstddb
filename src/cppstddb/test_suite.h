@@ -5,6 +5,7 @@
 #include <ostream>
 #include <stdexcept>
 #include <numeric>
+#include <algorithm>
 
 /*
    A really basic test framework & content to start with,
@@ -32,10 +33,10 @@ namespace cppstddb {
 
     inline void test_header(const char *name) {
         using namespace std;
-        cout << endl;
-        cout << "============================================= " << endl; 
-        cout << name << endl;
-        cout << "============================================= " << endl; 
+        cout << "\n";
+        cout << "============================================= \n"; 
+        cout << name << "\n";
+        cout << "============================================= \n"; 
     }
 
     template<class database> void simple_test(const std::string& uri) {
@@ -114,7 +115,7 @@ namespace cppstddb {
         for(auto i = rowset.begin(); i != rowset.end(); ++i) {
             auto row = *i;
             auto f = row[0], g = row[1];
-            //cout << "VALUE: " << f.as<string>() << endl;
+            //cout << "VALUE: " << f.as<string>() << "\n";
             std::cout << "value: " << f << ": " << g << "\n";
         }
     }
