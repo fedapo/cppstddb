@@ -129,6 +129,18 @@ namespace cppstddb { namespace front {
                 return statement(sql).query();
             }
 
+            void begin() {
+              data_->begin();
+            }
+
+            void commit() {
+              data_->commit();
+            }
+
+            void rollback() {
+              data_->rollback();
+            }
+
         private:
 
             static source get_source(const database_t& db) {
@@ -188,7 +200,9 @@ namespace cppstddb { namespace front {
             }
 
             template<typename... Args> statement& query(Args... args) {
-                //info("HERE: ",args...);
+                //info("HERE: ", args...);
+                data_->query(args...);
+                state_ = state_executed;
                 return *this;
             }
 

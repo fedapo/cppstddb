@@ -106,6 +106,15 @@ namespace cppstddb { namespace mysql {
                     if (mysql) mysql_close(mysql);
                 }
 
+                void commit() {
+                  DB_TRACE("commit");
+                  my_bool res = mysql_commit(mysql);
+                }
+
+                void rollback() {
+                  DB_TRACE("rollback");
+                  my_bool res = mysql_rollback(mysql);
+                }
         };
 
         template<class P> class statement {
@@ -143,6 +152,11 @@ namespace cppstddb { namespace mysql {
                     return *this;
                 }
 
+                template <typename... Args>
+                statement& query(Args... args) {
+                  //info("HERE: ",args...);
+                  return *this;
+                }
         };
 
         template<class P> struct describe_type {

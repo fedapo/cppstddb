@@ -109,6 +109,24 @@ namespace cppstddb { namespace sqlite {
 					DB_TRACE("~con: sqlite closing " << path);
 					if (sq) check_nothrow("sqlite3_close", sqlite3_close(sq));
 				}
+
+        void begin() {
+          DB_TRACE("begin");
+          char* zErrMsg = nullptr;
+          int res = sqlite3_exec(sq, "begin", nullptr, nullptr, &zErrMsg);
+        }
+
+        void commit() {
+          DB_TRACE("commit");
+          char* zErrMsg = nullptr;
+          int res = sqlite3_exec(sq, "commit", nullptr, nullptr, &zErrMsg);
+        }
+
+        void rollback() {
+          DB_TRACE("rollback");
+          char* zErrMsg = nullptr;
+          int res = sqlite3_exec(sq, "rollback", nullptr, nullptr, &zErrMsg);
+        }
 		};
 
 		template<class P> class statement {
